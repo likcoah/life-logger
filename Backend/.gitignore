@@ -1,0 +1,10 @@
+*
+
+!.gitignore
+
+!src/
+!src/bot/
+!src/database/
+!src/scheduler/
+
+!src/**/*.py
