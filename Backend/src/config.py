@@ -11,9 +11,9 @@ class BotConfig:
             self.token = env_variables['BOT_TOKEN']
             self.admin_id = int(env_variables['ADMIN_ID'])
         except ValueError as error:
-            raise ValueError(f'\033[31m{error.args[0]} is not an integer in the env file\033[0m')
+            raise ValueError(f'{error.args[0]} is not an integer in the env file')
         except KeyError as error:
-            raise ValueError(f'\033[31m{error.args[0]} not found in the env file\033[0m')
+            raise ValueError(f'{error.args[0]} not found in the env file')
 
 
 class Config:
@@ -32,7 +32,7 @@ def parseEnvFile(env_file_path: str) -> dict:
                 raw_env[key.strip()] = value.strip()
         return raw_env
     except FileNotFoundError as error:
-        raise FileNotFoundError(f'\033[31m{env_file_path} not found\033[0m') from error
+        raise FileNotFoundError(f'{env_file_path} not found') from error
 
 MAIN_DIR = path.abspath(path.join(path.dirname(__file__), ".."))
 ENV_PATH = path.join(MAIN_DIR, '.env')
