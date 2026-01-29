@@ -5,7 +5,11 @@
 
 !src/
 !src/bot/
+!src/bot/**/
 !src/database/
+!src/database/**/
 !src/scheduler/
+!src/scheduler/**/
 
+!*.py
 !src/**/*.py
