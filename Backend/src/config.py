@@ -1,4 +1,5 @@
 from os import path
+from enum import IntEnum
 
 
 class BotConfig:
@@ -16,9 +17,18 @@ class BotConfig:
             raise ValueError(f'{error.args[0]} not found in the env file')
 
 
+class Categories(IntEnum):
+    routine = 0
+    work = 1
+    hobby = 2
+    active_recreation = 3
+    passive_recreation = 4
+
+
 class Config:
     def __init__(self, env_variables: dict):
         self.bot = BotConfig(env_variables)
+        self.categories = Categories
 
 
 def parseEnvFile(env_file_path: str) -> dict:
