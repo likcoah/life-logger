@@ -1,23 +1,25 @@
+from src.database.accounts import Accounts
+
 from os import path
 import sqlite3
 import atexit
 
 
-class DataBase:
+class DataBase(Accounts):
     def __init__(self, database_path: str):
         self.connection = sqlite3.connect(database_path, check_same_thread=False)
         self.cursor = self.connection.cursor()
 
         atexit.register(self.close)
        
-        self.connection.execute('PRAGMA foreign_keys = ON;')
+        self.cursor.execute('PRAGMA foreign_keys = ON;')
         self.cursor.executescript('''
             CREATE TABLE IF NOT EXISTS users (
                 user_id INTEGER PRIMARY KEY,
                 register_date DATE NOT NULL DEFAULT CURRENT_DATE,
                 streak_start DATE,
-                streak INTEGER,
-                longer_streak INTEGER
+                streak INTEGER DEFAULT 0,
+                longer_streak INTEGER DEFAULT 0
             );
             CREATE TABLE IF NOT EXISTS timers (
                 id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -36,7 +38,7 @@ class DataBase:
         self.connection.commit()
 
 
-    def close(self):
+    def close(self) -> None:
         self.connection.close()
 
 
