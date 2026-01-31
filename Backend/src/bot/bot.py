@@ -1,5 +1,5 @@
 from src.config import config
-from src.bot.handlers import common
+from src.bot.handlers import common, delete_account
 
 from aiogram import Bot, Dispatcher
 from aiogram.client.default import DefaultBotProperties
@@ -16,7 +16,8 @@ async def run():
 
     dp = Dispatcher()
     dp.include_routers(
-            common.router
+            common.router,
+            delete_account.router
         )
 
     print('Bot started')
