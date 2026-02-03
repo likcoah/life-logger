@@ -1,20 +1,12 @@
-from os import path
+import os
 from enum import IntEnum
+from dataclasses import dataclass
 
 
+@dataclass(frozen=True)
 class BotConfig:
     token: str
     admin_id: int
-
-
-    def __init__(self, env_variables):
-        try:
-            self.token = env_variables['BOT_TOKEN']
-            self.admin_id = int(env_variables['ADMIN_ID'])
-        except ValueError as error:
-            raise ValueError(f'{error.args[0]} is not an integer in the env file')
-        except KeyError as error:
-            raise ValueError(f'{error.args[0]} not found in the env file')
 
 
 class Categories(IntEnum):
@@ -25,18 +17,27 @@ class Categories(IntEnum):
     passive_recreation = 4
 
 
+def fill_data_class(data_class: type, env_vars: dict) -> object:
+    try:
+        return data_class(**dict((var, var_type(env_vars[var.upper()])) if var.upper() in env_vars
+                                 else (var, var_type(os.getenv(var.upper())))
+                                 for var, var_type in data_class.__annotations__.items()))
+    except Exception as error:
+        raise ValueError(f'{error}\nCheck the .env file or environment variables')
+
+
 class Config:
     def __init__(self, env_variables: dict):
-        self.bot = BotConfig(env_variables)
+        self.bot = fill_data_class(BotConfig, env_variables)
         self.categories = Categories
 
 
-def parseEnvFile(env_file_path: str) -> dict:
+def parse_env_file(env_file_path: str) -> dict:
     try:
         raw_env = {}
         with open(env_file_path, 'r') as file:
             for line in file:
-                if not line.strip() or '=' not in line:
+                if '=' not in line:
                     continue
                 key, value = line.strip().split('=', 1)
                 raw_env[key.strip()] = value.strip()
@@ -44,8 +45,8 @@ def parseEnvFile(env_file_path: str) -> dict:
     except FileNotFoundError as error:
         raise FileNotFoundError(f'{env_file_path} not found') from error
 
-MAIN_DIR = path.abspath(path.join(path.dirname(__file__), ".."))
-ENV_PATH = path.join(MAIN_DIR, '.env')
+MAIN_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+ENV_PATH, ENV_PATH = os.getenv('ENV_PATH'), os.path.join(MAIN_DIR, '.env')
 
-config = Config(parseEnvFile(ENV_PATH))
+config = Config(parse_env_file(ENV_PATH))
 
