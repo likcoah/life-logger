@@ -34,14 +34,9 @@ class Config:
 
 def parse_env_file(env_file_path: str) -> dict:
     try:
-        raw_env = {}
         with open(env_file_path, 'r') as file:
-            for line in file:
-                if '=' not in line:
-                    continue
-                key, value = line.strip().split('=', 1)
-                raw_env[key.strip()] = value.strip()
-        return raw_env
+            return {parts[0].strip(): parts[1].strip() for line in file
+                    if '=' in line and not line.strip().startswith('#') and (parts := line.strip().split('=', 1))}
     except FileNotFoundError as error:
         raise FileNotFoundError(f'{env_file_path} not found') from error
 
