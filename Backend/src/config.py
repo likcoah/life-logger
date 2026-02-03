@@ -41,7 +41,7 @@ def parse_env_file(env_file_path: str) -> dict:
         raise FileNotFoundError(f'{env_file_path} not found') from error
 
 MAIN_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
-ENV_PATH, ENV_PATH = os.getenv('ENV_PATH'), os.path.join(MAIN_DIR, '.env')
+ENV_PATH = os.getenv('ENV_PATH') or os.path.join(MAIN_DIR, '.env')
 
 config = Config(parse_env_file(ENV_PATH))
 
