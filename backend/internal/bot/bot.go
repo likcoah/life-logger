@@ -2,7 +2,7 @@ package bot
 
 
 import (
-	"fmt"
+	"log"
 	"context"
 	"github.com/go-telegram/bot"
 	"github.com/go-telegram/bot/models"
@@ -54,8 +54,8 @@ func (b *Bot) startHandler(ctx context.Context, b_tg *bot.Bot, update *models.Up
 
 
 func (b *Bot) Start(ctx context.Context) {
-	fmt.Println("Bot started")
+	log.Print("Bot started")
 	b.client.Start(ctx)
-	fmt.Println("Bot stopped")
+	log.Print("Bot stopped")
 }
 
