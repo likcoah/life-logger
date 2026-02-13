@@ -12,6 +12,7 @@ services:
 
   database:
     image: postgres:15-alpine
+    user: "1000:1000"
     container_name: life-logger-database
     restart: always
     environment:
